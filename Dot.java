@@ -1,4 +1,4 @@
-package composite;
+package memento.shapes;
 
 import java.awt.*;
 

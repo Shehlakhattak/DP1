@@ -1,4 +1,4 @@
-package composite;
+package memento.shapes;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CompoundShape extends BaseShape {
-    protected List<Shape> children = new ArrayList<>();
+    private List<Shape> children = new ArrayList<>();
 
     public CompoundShape(Shape... components) {
         super(0, 0, Color.BLACK);
@@ -90,9 +90,30 @@ public class CompoundShape extends BaseShape {
     }
 
     @Override
-    public void move(int x, int y) {
+    public void drag() {
         for (Shape child : children) {
-            child.move(x, y);
+            child.drag();
+        }
+    }
+
+    @Override
+    public void drop() {
+        for (Shape child : children) {
+            child.drop();
+        }
+    }
+
+    @Override
+    public void moveTo(int x, int y) {
+        for (Shape child : children) {
+            child.moveTo(x, y);
+        }
+    }
+
+    @Override
+    public void moveBy(int x, int y) {
+        for (Shape child : children) {
+            child.moveBy(x, y);
         }
     }
 
@@ -107,6 +128,14 @@ public class CompoundShape extends BaseShape {
     }
 
     @Override
+    public void setColor(Color color) {
+        super.setColor(color);
+        for (Shape child : children) {
+            child.setColor(color);
+        }
+    }
+
+    @Override
     public void unSelect() {
         super.unSelect();
         for (Shape child : children) {
@@ -114,14 +143,32 @@ public class CompoundShape extends BaseShape {
         }
     }
 
-    public boolean selectChildAt(int x, int y) {
+    public Shape getChildAt(int x, int y) {
         for (Shape child : children) {
             if (child.isInsideBounds(x, y)) {
-                child.select();
-                return true;
+                return child;
             }
         }
+        return null;
+    }
+
+    public boolean selectChildAt(int x, int y) {
+        Shape child = getChildAt(x,y);
+        if (child != null) {
+            child.select();
+            return true;
+        }
         return false;
+    }
+
+    public List<Shape> getSelected() {
+        List<Shape> selected = new ArrayList<>();
+        for (Shape child : children) {
+            if (child.isSelected()) {
+                selected.add(child);
+            }
+        }
+        return selected;
     }
 
     @Override

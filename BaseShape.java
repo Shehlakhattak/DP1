@@ -1,26 +1,17 @@
-package composite;
+package memento.shapes;
 
 import java.awt.*;
 
-abstract class BaseShape implements Shape {
-    public int x;
-    public int y;
-    public Color color;
+public abstract class BaseShape implements Shape {
+    int x, y;
+    private int dx = 0, dy = 0;
+    private Color color;
     private boolean selected = false;
-    int trix[];
-    int triy[];
 
     BaseShape(int x, int y, Color color) {
         this.x = x;
         this.y = y;
         this.color = color;
-    }
-    
-    BaseShape(int[] x, int[] y, Color color){
-        trix=x;
-        triy=y;
-        this.color=color;
-        
     }
 
     @Override
@@ -44,15 +35,43 @@ abstract class BaseShape implements Shape {
     }
 
     @Override
-    public void move(int x, int y) {
+    public void drag() {
+        dx = x;
+        dy = y;
+    }
+
+    @Override
+    public void moveTo(int x, int y) {
+        this.x = dx + x;
+        this.y = dy + y;
+    }
+
+    @Override
+    public void moveBy(int x, int y) {
         this.x += x;
         this.y += y;
+    }
+
+    @Override
+    public void drop() {
+        this.x = dx;
+        this.y = dy;
     }
 
     @Override
     public boolean isInsideBounds(int x, int y) {
         return x > getX() && x < (getX() + getWidth()) &&
                 y > getY() && y < (getY() + getHeight());
+    }
+
+    @Override
+    public Color getColor() {
+        return color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override
@@ -86,7 +105,6 @@ abstract class BaseShape implements Shape {
         Graphics2D g2 = (Graphics2D) graphics;
         g2.setStroke(new BasicStroke());
     }
-
 
     @Override
     public void paint(Graphics graphics) {

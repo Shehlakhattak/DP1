@@ -1,9 +1,9 @@
-package composite;
+package memento.shapes;
 
 import java.awt.*;
 
 public class Circle extends BaseShape {
-    public int radius;
+    private int radius;
 
     public Circle(int x, int y, int radius, Color color) {
         super(x, y, color);
@@ -20,6 +20,7 @@ public class Circle extends BaseShape {
         return radius * 2;
     }
 
+    @Override
     public void paint(Graphics graphics) {
         super.paint(graphics);
         graphics.drawOval(x, y, getWidth() - 1, getHeight() - 1);
